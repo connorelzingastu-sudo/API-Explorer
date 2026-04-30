@@ -2,7 +2,7 @@ import requests
 
 print("Welcome to the Python Pokédex!")
 print("Search for Pokémon and view their information.")
-
+print("")
 def display_pokemon(data):
     print()
     print("======================")
@@ -38,11 +38,14 @@ def display_pokemon(data):
             highest_stat_value = stat_value
             highest_stat_name = clean_stat_name
     print(f"Strongest Stat: {highest_stat_name} with {highest_stat_value}")
-    
+
+
+
+#pass a pokemon name to get the api response if no response is found it will display a message
 def get_pokemon_data(pokemon_name):
     url = f"https://pokeapi.co/api/v2/pokemon/{pokemon_name}"
-
     response = requests.get(url)
+
     if response.status_code == 200:
         data = response.json()
         display_pokemon(data)
