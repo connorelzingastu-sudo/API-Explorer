@@ -3,6 +3,7 @@ import requests
 print("Welcome to the Python Pokédex!")
 print("Search for Pokémon and view their information.")
 print("")
+
 def display_pokemon(data):
     print()
     print("======================")
@@ -54,7 +55,7 @@ def get_pokemon_data(pokemon_name):
 
 def main():
     while True:
-        pokemon_name = input("Enter a Pokémon name (or 'quit' to exit): ").lower()
+        pokemon_name = input("Enter a Pokémon name / Id, (or 'quit' to exit): ").lower()
 
         if pokemon_name == "quit":
             print("Goodbye")
