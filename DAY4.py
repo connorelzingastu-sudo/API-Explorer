@@ -6,6 +6,30 @@ def welcome_message():
     print("Search for Pokémon and view their information.")
     print()
 
+# Compute battle score
+def compute_battle_score(data):
+    battle_score = 0
+    for stat_info in data["stats"]:
+        stat_name = stat_info["stat"]["name"]
+        stat_value = int(stat_info["base_stat"])
+
+        # Add to battle score if it is included in battle stat list
+        if stat_name in ["attack", "defense", "speed"]:
+            battle_score += stat_value
+    return battle_score
+
+# Compare battle scores for a list of Pokemon data
+def compare_battle_scores(data_all):
+    highest_score = 0
+    highest_score_name = ""
+    for data in data_all:
+        score = compute_battle_score(data)
+        if score > highest_score:
+            highest_score = score
+            highest_score_name = data["name"].title()
+    print()
+    print(f"The Pokémon with the highest battle score: {highest_score_name} with {highest_score}")
+
 # Takes pokemon 'data' and displays it in a pretty format
 def display_pokemon(data):
     print()
@@ -21,33 +45,32 @@ def display_pokemon(data):
     # Types
     type_names = []
     for type_info in data["types"]:
-        type_names.append(type_info["type"]["name"])
+        type_names.append(type_info["type"]["name"].title())
     print("\nTypes: "  + ", ".join(type_names))
     
     print("\nAbilities:")
     for ability_info in data["abilities"]:
-       print("-", ability_info["ability"]["name"])
+       print("-", ability_info["ability"]["name"].title())
     
     print("\nBase Stats:")
     highest_stat_value = 0
     highest_stat_name = ""
-    battle_score = 0
     for stat_info in data["stats"]:
         stat_name = stat_info["stat"]["name"]
         clean_stat_name = stat_name.replace("-"," ").title()
         stat_value = int(stat_info["base_stat"])
         print(f"- {clean_stat_name}: {stat_value}")
 
-        # Add to battle score if it is included in battle stat list
-        if stat_name in ["attack", "defense", "speed"]:
-            battle_score += stat_value
-
         # Check for higher stats
         if stat_value > highest_stat_value:
             highest_stat_value = stat_value
             highest_stat_name = clean_stat_name
+    print()
     print(f"Strongest Stat: {highest_stat_name} with {highest_stat_value}")
+
+    battle_score = compute_battle_score(data)
     print(f"Battle Score: {battle_score}")
+    print()
 
 
 
@@ -68,23 +91,38 @@ def main():
 
     # Main program loop
     while True:
-        # User input
-        pokemon_name = input("Enter a Pokémon name / Id, (or 'quit' to exit): ").lower()
 
-        # Check for exit condition
-        if pokemon_name == "quit":
-            print("Goodbye")
-            break
+        # User input, check to see if user wants add multiple
+        pokemon_names = []
+        while True:
+            pokemon_name = input("Enter a Pokémon name/Id, (or 'quit' to exit): ").lower()
+            pokemon_names.append(pokemon_name)
 
-        # Get and display pokemon data for the input if available
-        data = get_pokemon_data(pokemon_name)
-        if data:
-            display_pokemon(data)
-            save = input("Save this Pokémon to favorites? yes/no: ").lower()
-            if save == "yes":
-                with open("favorites.txt", "a") as f:
-                    f.write(data["name"].title() + "\n")
-                print("Saved to favorites.txt")
+             # Check for exit condition
+            if pokemon_name == "quit":
+                print("Goodbye")
+                return
+            
+            more = input("Would you like to add another Pokémon to compare? yes/no: ").lower()
+            if more != "yes":
+                break
+
+        data_all = []
+        for pokemon_name in pokemon_names:
+            # Get and display pokemon data for the input if available
+            data_all.append(get_pokemon_data(pokemon_name))
+        
+        if len(data_all) == 1:
+            data = data_all[0]
+            if data:
+                display_pokemon(data)
+                save = input("Save this Pokémon to favorites? yes/no: ").lower()
+                if save == "yes":
+                    with open("favorites.txt", "a") as f:
+                        f.write(data["name"].title() + "\n")
+                    print("Saved to favorites.txt")
+        else:
+            compare_battle_scores(data_all)
 main()
 
 # Reflection Questions:
