@@ -134,10 +134,10 @@ main()
 # 6. What was the hardest part of working with API data?
 # 7. How could APIs be used in a real app, website, or game?
 
-# 1 
-# 2
-# 3
-# 4
-# 5
-# 6
-# 7
+# 1 Is is useful because its makesit so that you can reuse thiings that you have already tested and helps keep evythig organised. 
+# 2 It leaves the function and gives the result to who ever called the function.
+# 3 We used it because you want the program to run until you aks the program to finish, so you can ask for multipule pokemon at one.  
+# 4 It priints goodbye and breaks out of the main loop, then main finishes and the we reach the end of the file.
+# 5 I added comparing multipule pokemon, pokemon base stats, the pokemons stongest stat, saving the pokemon to faverites, and caculated their battle score.
+# 6 Figureing out why some information was taken as incorrect even though it is real was hard.  
+# 7 They are used to connect to services so that you can reuse imfomation that is provide else where for your app. 
