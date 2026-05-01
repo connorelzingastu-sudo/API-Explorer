@@ -31,17 +31,24 @@ def display_pokemon(data):
     print("\nBase Stats:")
     highest_stat_value = 0
     highest_stat_name = ""
+    battle_score = 0
     for stat_info in data["stats"]:
         stat_name = stat_info["stat"]["name"]
         clean_stat_name = stat_name.replace("-"," ").title()
         stat_value = int(stat_info["base_stat"])
         print(f"- {clean_stat_name}: {stat_value}")
 
+        # Add to battle score if it is included in battle stat list
+        if stat_name in ["attack", "defense", "speed"]:
+            battle_score += stat_value
+
         # Check for higher stats
         if stat_value > highest_stat_value:
             highest_stat_value = stat_value
             highest_stat_name = clean_stat_name
     print(f"Strongest Stat: {highest_stat_name} with {highest_stat_value}")
+    print(f"Battle Score: {battle_score}")
+
 
 
 
@@ -73,12 +80,12 @@ def main():
         data = get_pokemon_data(pokemon_name)
         if data:
             display_pokemon(data)
+            save = input("Save this Pokémon to favorites? yes/no: ").lower()
+            if save == "yes":
+                with open("favorites.txt", "a") as f:
+                    f.write(data["name"].title() + "\n")
+                print("Saved to favorites.txt")
 main()
-
-
-
-
-
 
 # Reflection Questions:
 # 1. Why are functions useful in this project?
